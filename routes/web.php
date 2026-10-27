@@ -11,7 +11,8 @@ use App\Http\Controllers\ItemProjetoController;
 Route::get('/', function () {return view('welcome');});
 
 // Módulo de Clientes
-Route::post('/clientes', [ClienteController::class, 'store']);
+Route::get('/clientes', [ClienteController::class, 'index']); // Mostra a tela
+Route::post('/clientes', [ClienteController::class, 'store']); // Salva no banco
 
 // Módulo de Usuários (Cadastro)
 Route::post('/usuarios', [UsuarioController::class, 'store']);

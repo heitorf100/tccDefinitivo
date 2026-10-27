@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\CpfCnpj;
 
 class ClienteFormRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class ClienteFormRequest extends FormRequest
     {
         return [
             'nome_razao'  => ['required', 'string', 'max:150'],
-            'cpf_cnpj'    => ['required', 'string', 'max:20', 'unique:clientes,cpf_cnpj'],
+            'cpf_cnpj'    => ['required', 'string', 'max:20', 'unique:clientes,cpf_cnpj', new \App\Rules\CpfCnpj()],
             'tipo_pessoa' => ['required', 'in:PF,PJ'],
         ];
     }

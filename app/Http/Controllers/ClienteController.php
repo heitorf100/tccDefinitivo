@@ -9,6 +9,18 @@ use Illuminate\Http\Request;
 class ClienteController extends Controller
 {
     /**
+     * LISTAR: Retorna a tela visual com a tabela de clientes
+     */
+    public function index()
+    {
+        // Busca todos os clientes no banco de dados
+        $clientes = Cliente::all();
+        
+        // Devolve a tela 'clientes.index' passando a variável $clientes para ela
+        return view('clientes.index', compact('clientes'));
+    }
+
+    /**
      * Armazena um novo cliente no banco de dados.
      * 
      * @param ClienteFormRequest $request
@@ -16,16 +28,10 @@ class ClienteController extends Controller
      */
     public function store(ClienteFormRequest $request)
     {
-        // Como estamos usando o ClienteFormRequest, se chegou até aqui,
-        // os dados já passaram por todas as validações de segurança e regras.
-        
+        // Valida e guarda na base de dados
         $cliente = Cliente::create($request->validated());
 
-        // Retorno de resposta estruturado para API / requisições
-        return response()->json([
-            'status' => 'sucesso',
-            'message' => 'Cliente cadastrado com sucesso!',
-            'data' => $cliente
-        ], 201);
+        // Em vez de retornar JSON, redirecionamos de volta para a lista com uma mensagem
+        return redirect('/clientes')->with('sucesso', 'Cliente cadastrado com sucesso!');
     }
 }
