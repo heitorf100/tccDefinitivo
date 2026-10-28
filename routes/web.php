@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\EnderecoController;
+use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TipologiaController;
@@ -13,6 +15,18 @@ Route::get('/', function () {return view('welcome');});
 // Módulo de Clientes
 Route::get('/clientes', [ClienteController::class, 'index']); // Mostra a tela
 Route::post('/clientes', [ClienteController::class, 'store']); // Salva no banco
+Route::get('/clientes/{id}', [ClienteController::class, 'show']); //Mostra lista de Cliente
+Route::get('/clientes/{id}/edit', [ClienteController::class, 'edit']); //Edita Cliente
+Route::put('/clientes/{id}', [ClienteController::class, 'update']); //Atualiza a Edição
+Route::delete('/clientes/{id}', [ClienteController::class, 'destroy']); //Exclui Cliente
+
+// Módulo Endereço
+Route::post('/clientes/{id}/enderecos', [EnderecoController::class, 'store']); //Guarda Endereço
+Route::delete('/enderecos/{id}', [EnderecoController::class, 'destroy']);
+
+// Módulo Contato
+Route::post('/clientes/{id}/contatos', [ContatoController::class, 'store']); //Guarda um Contato
+Route::delete('/contatos/{id}', [ContatoController::class, 'destroy']); // Exclui contato
 
 // Módulo de Usuários (Cadastro)
 Route::post('/usuarios', [UsuarioController::class, 'store']);

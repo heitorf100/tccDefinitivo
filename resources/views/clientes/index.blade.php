@@ -18,6 +18,21 @@
     </div>
 @endif
 
+<!-- Alerta de Erros de Validação (CPF Inválido / Duplicado) -->
+@if($errors->any())
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>Atenção!</strong> Verifique os dados informados:
+        <ul class="mb-0 mt-1">
+            @foreach($errors->all() as $erro)
+                <li>{{ $erro }}</li>
+            @endforeach
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>
+@endif
+
+
+
 <!-- Tabela de Clientes -->
 <div class="card shadow-sm border-0 rounded-4">
     <div class="card-body p-0">
@@ -27,7 +42,7 @@
                     <tr>
                         <th class="ps-4 py-3">Nome / Razão Social</th>
                         <th class="py-3">CPF / CNPJ</th>
-                        <th class="py-3">Telefone</th>
+                        <th class="py-3">Tipo</th>
                         <th class="pe-4 py-3 text-end">Ações</th>
                     </tr>
                 </thead>
@@ -35,16 +50,32 @@
                     <!-- O Blade faz um loop (forelse) para desenhar uma linha para cada cliente -->
                     @forelse($clientes as $cliente)
                         <tr class="border-bottom">
-                            <td class="ps-4 fw-medium">{{ $cliente->nome }}</td>
-                            <td class="text-muted">{{ $cliente->cpf_cnpj ?? 'Não informado' }}</td>
-                            <td class="text-muted">{{ $cliente->telefone ?? 'Não informado' }}</td>
+                            <td class="ps-4 fw-medium">{{ $cliente->nome_razao }}</td>
+                            <td class="text-muted">{{ $cliente->cpf_cnpj }}</td>
+                            <td>
+                                <span class="badge bg-{{ $cliente->tipo_pessoa == 'PJ' ? 'primary' : 'success' }} bg-opacity-10 text-{{ $cliente->tipo_pessoa == 'PJ' ? 'primary' : 'success' }}">
+                                    {{ $cliente->tipo_pessoa }}
+                                </span>
+                            </td>
                             <td class="pe-4 text-end">
-                                <button class="btn btn-sm btn-outline-secondary rounded-pill me-1" title="Editar">
+                                <!-- Botão para Visualizar o Perfil Completo -->
+                                <a href="/clientes/{{ $cliente->id }}" class="btn btn-sm btn-outline-primary rounded-pill me-1" title="Ver Perfil, Endereços e Contatos">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                
+                                <!-- Botão de Editar -->
+                                <a href="/clientes/{{ $cliente->id }}/edit" class="btn btn-sm btn-outline-secondary rounded-pill me-1" title="Editar">
                                     <i class="bi bi-pencil"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-danger rounded-pill" title="Excluir">
-                                    <i class="bi bi-trash"></i>
-                                </button>
+                                </a>
+
+                                <!-- Formulário de Exclusão (Método DELETE) -->
+                                <form action="/clientes/{{ $cliente->id }}" method="POST" class="d-inline" onsubmit="return confirm('Deseja realmente excluir este cliente e todos os seus vínculos?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill" title="Excluir">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     @empty
@@ -78,21 +109,20 @@
                 @csrf
                 <div class="modal-body p-4">
                     <div class="row g-3">
-                        <div class="col-md-12">
+                        <div class="col-md-8">
                             <label class="form-label fw-medium">Nome / Razão Social <span class="text-danger">*</span></label>
-                            <input type="text" name="nome" class="form-control" required placeholder="Ex: João da Silva ou Construtora Alpha">
+                            <input type="text" name="nome_razao" class="form-control" required placeholder="Ex: João da Silva ou Construtora Alpha">
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label class="form-label fw-medium">Tipo <span class="text-danger">*</span></label>
+                            <select name="tipo_pessoa" class="form-select" required>
+                                <option value="PF">Pessoa Física (PF)</option>
+                                <option value="PJ">Pessoa Jurídica (PJ)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
                             <label class="form-label fw-medium">CPF / CNPJ <span class="text-danger">*</span></label>
                             <input type="text" name="cpf_cnpj" class="form-control" required placeholder="Apenas números">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label fw-medium">Telefone <span class="text-danger">*</span></label>
-                            <input type="text" name="telefone" class="form-control" required placeholder="(00) 00000-0000">
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label fw-medium">E-mail</label>
-                            <input type="email" name="email" class="form-control" placeholder="contato@cliente.com.br">
                         </div>
                     </div>
                 </div>
@@ -111,7 +141,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const cpfCnpjInput = document.querySelector('input[name="cpf_cnpj"]');
-        const telefoneInput = document.querySelector('input[name="telefone"]');
 
         // Máscara para CPF e CNPJ (dinâmica)
         cpfCnpjInput.addEventListener('input', function(e) {
@@ -129,14 +158,6 @@
             }
             // Limita a 18 caracteres (tamanho máximo de um CNPJ formatado)
             e.target.value = v.substring(0, 18);
-        });
-
-        // Máscara para Telefone (com 8 ou 9 dígitos)
-        telefoneInput.addEventListener('input', function(e) {
-            let v = e.target.value.replace(/\D/g, "");
-            v = v.replace(/^(\d{2})(\d)/g, "($1) $2");
-            v = v.replace(/(\d)(\d{4})$/, "$1-$2");
-            e.target.value = v.substring(0, 15);
         });
     });
 </script>

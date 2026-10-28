@@ -21,17 +21,57 @@ class ClienteController extends Controller
     }
 
     /**
+     * EXIBIR PERFIL: Mostra os detalhes do cliente, endereços e contatos
+     */
+    public function show($id)
+    {
+        // Busca o cliente pelo ID ou retorna erro 404, carregando os relacionamentos 3FN
+        $cliente = Cliente::with(['enderecos', 'contatos'])->findOrFail($id);
+
+        return view('clientes.show', compact('cliente'));
+    }
+
+    /**
+     * EDITAR: Abre o formulário de edição de cliente
+     */
+    public function edit($id)
+    {
+        $cliente = Cliente::findOrFail($id);
+        
+        return view('clientes.edit', compact('cliente'));
+    }
+
+    /**
+     * ATUALIZAR: Salva as alterações do cliente no banco de dados
+     */
+    public function update(ClienteFormRequest $request, $id)
+    {
+        $cliente = Cliente::findOrFail($id);
+        $cliente->update($request->validated());
+
+        return redirect()->to('/clientes')->with('sucesso', 'Cliente atualizado com sucesso!');
+    }
+
+    /**
+     * EXCLUIR: Remove o cliente da base de dados (o onDelete cascade limpa endereços e contatos)
+     */
+    public function destroy($id)
+    {
+        $cliente = Cliente::findOrFail($id);
+        $cliente->delete();
+
+        return redirect()->to('/clientes')->with('sucesso', 'Cliente excluído com sucesso!');
+    }
+
+    /**
      * Armazena um novo cliente no banco de dados.
-     * 
-     * @param ClienteFormRequest $request
-     * @return \Illuminate\Http\JsonResponse
      */
     public function store(ClienteFormRequest $request)
     {
         // Valida e guarda na base de dados
-        $cliente = Cliente::create($request->validated());
+        Cliente::create($request->validated());
 
-        // Em vez de retornar JSON, redirecionamos de volta para a lista com uma mensagem
-        return redirect('/clientes')->with('sucesso', 'Cliente cadastrado com sucesso!');
+        // Redireciona com segurança para a lista preservando o túnel do Codespaces
+        return redirect()->to('/clientes')->with('sucesso', 'Cliente cadastrado com sucesso!');
     }
 }
