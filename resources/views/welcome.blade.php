@@ -34,7 +34,7 @@
                 </div>
                 <h4 class="card-title fw-bold">Catálogo</h4>
                 <p class="card-text text-muted mb-4">Cadastre tipologias, portas, janelas e gerencie os modelos da fábrica.</p>
-                <a href="/tipologias" class="btn btn-success w-100 rounded-pill fw-semibold">Gerenciar Esquadrias</a>
+                <a href="/materiais" class="btn btn-success w-100 rounded-pill fw-semibold">Gerenciar Materiais</a>
             </div>
         </div>
     </div>

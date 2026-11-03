@@ -10,6 +10,8 @@ use App\Http\Controllers\TipologiaController;
 use App\Http\Controllers\OrcamentoController;
 use App\Http\Controllers\ItemProjetoController;
 
+use App\Http\Controllers\MaterialController;
+
 Route::get('/', function () {return view('welcome');});
 
 // Módulo de Clientes
@@ -41,6 +43,7 @@ Route::post('/tipologias', [TipologiaController::class, 'store']);
 Route::get('/tipologias/{id}', [TipologiaController::class, 'show']);
 Route::put('/tipologias/{id}', [TipologiaController::class, 'update']);
 Route::delete('/tipologias/{id}', [TipologiaController::class, 'destroy']);
+Route::resource('materiais', MaterialController::class);
 
 // Módulo de Orçamentos (CRUD Completo)
 Route::get('/orcamentos', [OrcamentoController::class, 'index']);

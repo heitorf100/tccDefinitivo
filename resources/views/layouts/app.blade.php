@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGEA - Gestão de Esquadrias</title>
+    <title>Esquadrimax - Gestão de Esquadrias</title>
     
     <!-- CSS do Bootstrap 5 (Via CDN) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,8 +21,8 @@
     <!-- Menu Superior (Navbar) -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="bi bi-tools"></i> SGEA
+            <a class="navbar-brand fw-bold text-white" href="/clientes">
+                <i class="bi bi-tools me-1"></i> Esquadrimax
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
                 <span class="navbar-toggler-icon"></span>
@@ -56,9 +56,8 @@
     </main>
 
     <!-- Rodapé -->
-    <footer class="text-center text-muted mt-5 pb-3">
-        <hr>
-        <small>&copy; {{ date('Y') }} SGEA - Sistema de Gestão e Controle de Corte de Alumínio. Todos os direitos reservados.</small>
+    <footer class="text-center text-muted py-4">
+        <small>&copy; 2026 Esquadrimax - Sistema de Gestão e Controle de Esquadrias e Alumínio. Todos os direitos reservados.</small>
     </footer>
 
     <!-- Scripts do Bootstrap (Necessário para menus dropdown e modais funcionarem) -->
