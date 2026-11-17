@@ -2,15 +2,16 @@
 
 namespace App\Models\Catalogo;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Material extends Model
 {
-    // Força o Laravel a usar o nome da tabela em português
+    use HasFactory;
+
     protected $table = 'materiais';
 
-    // Libera os campos para salvamento seguro no banco de dados
-   protected $fillable = [
+    protected $fillable = [
         'codigo',
         'descricao',
         'cor',
@@ -19,6 +20,12 @@ class Material extends Model
         'tamanho_padrao_mm',
         'peso_por_metro',
         'preco_custo',
-        'imagem'
+        'imagem',
+    ];
+
+    protected $casts = [
+        'tamanho_padrao_mm' => 'integer',
+        'peso_por_metro'    => 'decimal:3',
+        'preco_custo'       => 'decimal:2',
     ];
 }

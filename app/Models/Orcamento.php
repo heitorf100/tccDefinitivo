@@ -12,38 +12,37 @@ class Orcamento extends Model
     protected $table = 'orcamentos';
 
     protected $fillable = [
-        'cliente_id', 
-        'endereco_id', 
-        'data_criacao', 
+        'cliente_id',
+        'endereco_id',
+        'data_criacao',
         'data_validade',
-        'prazo_entrega_dias', 
-        'tipo_servico', 
+        'prazo_entrega_dias',
+        'tipo_servico',
         'condicoes_pagamento',
-        'garantia_meses', 
-        'observacoes_contratuais', 
-        'status_pedido', 
-        'valor_total'
+        'garantia_meses',
+        'observacoes_contratuais',
+        'status_pedido',
+        'valor_total',
     ];
 
-    /**
-     * Relacionamento: Um orçamento pertence a um Cliente.
-     */
+    protected $casts = [
+        'data_criacao'       => 'date',
+        'data_validade'      => 'date',
+        'prazo_entrega_dias' => 'integer',
+        'garantia_meses'     => 'integer',
+        'valor_total'        => 'decimal:2',
+    ];
+
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
     }
 
-    /**
-     * Relacionamento: Um orçamento está vinculado a um Endereço (Obra).
-     */
     public function endereco()
     {
         return $this->belongsTo(Endereco::class);
     }
 
-    /**
-     * Relacionamento: Um orçamento possui vários Itens (vãos medidos).
-     */
     public function itens()
     {
         return $this->hasMany(ItemProjeto::class);

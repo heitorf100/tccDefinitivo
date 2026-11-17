@@ -3,36 +3,33 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use App\Rules\CpfCnpj;
 
 class ClienteFormRequest extends FormRequest
 {
-    /**
-     * Determine se o usuário está autorizado a fazer esta requisição.
-     */
     public function authorize(): bool
     {
-        // Retornamos true pois a autorização de rotas/perfis faremos em outra camada
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
+        $clienteId = $this->route('id');
+
         return [
             'nome_razao'  => ['required', 'string', 'max:150'],
-            'cpf_cnpj'    => ['required', 'string', 'max:20', 'unique:clientes,cpf_cnpj', new \App\Rules\CpfCnpj()],
+            'cpf_cnpj'    => [
+                'required',
+                'string',
+                'max:20',
+                Rule::unique('clientes', 'cpf_cnpj')->ignore($clienteId),
+                new CpfCnpj(),
+            ],
             'tipo_pessoa' => ['required', 'in:PF,PJ'],
         ];
     }
 
-    /**
-     * Mensagens de erro personalizadas para uma melhor experiência de uso.
-     */
     public function messages(): array
     {
         return [
