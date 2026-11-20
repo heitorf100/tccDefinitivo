@@ -54,14 +54,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Módulo de Tipologias (Descomentar rotas de tela e receita na Fase 4)
     Route::get('/tipologias', [TipologiaController::class, 'index']);
-    // Route::get('/tipologias/create', [TipologiaController::class, 'create']);
+    Route::get('/tipologias/create', [TipologiaController::class, 'create']);
     Route::post('/tipologias', [TipologiaController::class, 'store']);
     Route::get('/tipologias/{id}', [TipologiaController::class, 'show']);
-    // Route::get('/tipologias/{id}/edit', [TipologiaController::class, 'edit']);
+    Route::get('/tipologias/{id}/edit', [TipologiaController::class, 'edit']);
     Route::put('/tipologias/{id}', [TipologiaController::class, 'update']);
     Route::delete('/tipologias/{id}', [TipologiaController::class, 'destroy']);
-    // Route::post('/tipologias/{id}/materiais', [TipologiaController::class, 'adicionarMaterial']);
-    // Route::delete('/tipologias/{id}/materiais/{material}', [TipologiaController::class, 'removerMaterial']);
+    Route::post('/tipologias/{id}/materiais', [TipologiaController::class, 'adicionarMaterial']);
+    Route::delete('/tipologias/{id}/materiais/{pivotId}', [TipologiaController::class, 'removerMaterial']);
 
     // Módulo de Orçamentos (Descomentar rotas de tela na Fase 5)
     Route::get('/orcamentos', [OrcamentoController::class, 'index']);

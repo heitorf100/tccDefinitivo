@@ -2,17 +2,15 @@
 
 @section('conteudo')
 <div class="d-flex justify-content-between align-items-center mb-4 mt-3">
-    <div>
-        <a href="/clientes" class="text-decoration-none text-muted mb-2 d-inline-block">
-            <i class="bi bi-arrow-left"></i> Voltar para a Carteira
-        </a>
-        <h2 class="fw-bold text-dark"><i class="bi bi-person-badge text-warning"></i> {{ $cliente->nome_razao }}</h2>
-    </div>
-    <div>
+    <div class="d-flex align-items-center gap-3">
+        <h2 class="fw-bold text-dark mb-0"><i class="bi bi-person-badge text-warning me-2"></i>{{ $cliente->nome_razao }}</h2>
         <span class="badge bg-{{ $cliente->tipo_pessoa == 'PJ' ? 'primary' : 'success' }} fs-6 px-3 py-2">
             {{ $cliente->tipo_pessoa == 'PJ' ? 'Pessoa Jurídica (PJ)' : 'Pessoa Física (PF)' }}
         </span>
     </div>
+    <a href="/clientes" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Voltar para a Carteira
+    </a>
 </div>
 
 <!-- Alertas de Sucesso / Erro -->

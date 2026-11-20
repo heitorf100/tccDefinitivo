@@ -3,10 +3,10 @@
 @section('conteudo')
 <div class="row justify-content-center">
     <div class="col-md-8">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="d-flex justify-content-between align-items-center mb-4">
             <h3 class="fw-bold mb-0"><i class="bi bi-file-earmark-ruled me-2"></i>Ficha Técnica do Material</h3>
-            <a href="{{ route('materiais.index') }}" class="btn btn-outline-secondary btn-sm">
-                <i class="bi bi-arrow-left me-1"></i> Voltar
+            <a href="{{ route('materiais.index') }}" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i> Voltar ao Catálogo
             </a>
         </div>
 
